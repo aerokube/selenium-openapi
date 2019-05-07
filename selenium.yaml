@@ -1,0 +1,59 @@
+openapi: 3.0.1
+info:
+  title: Selenium WebDriver
+  description: '[Selenium WebDriver](https://www.w3.org/TR/webdriver) API specification'
+  version: 1.0.0
+  contact:
+    email: support@aerokube.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html  
+servers:
+  - url: http://localhost:4444/wd/hub
+    description: Local Selenium server
+  - url: http://localhost:4444/
+    description: Local WebDriver instance
+tags:
+  - name: misc
+    description: Miscellaneous commands
+  - name: session
+    description: Commands to start, stop a session and adjust its settings
+  - name: navigation
+    description: Navigation commands
+  - name: context
+    description: Command contexts
+  - name: element
+    description: Commands to work with page elements
+  - name: document
+    description: Document handling commands like getting page source
+  - name: cookie
+    description: Commands to work with cookies
+  - name: action
+    description: Actions like clicking on the buttons, moving the mouse and so on 
+  - name: prompt
+    description: Commands to work with alerts 
+  - name: screenshot
+    description: Commands to take screenshots 
+components:
+  schemas:
+    Status:
+      type: object
+      properties:
+        ready:
+          type: boolean
+        message:
+          type: string
+paths:
+  /status:
+    get:
+      tags:
+        - misc      
+      summary: Gets Selenium API status information
+      operationId: getStatus      
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
