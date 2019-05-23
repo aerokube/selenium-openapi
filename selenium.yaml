@@ -33,8 +33,12 @@ tags:
   - name: prompt
     description: Commands to work with alerts 
   - name: screenshot
-    description: Commands to take screenshots 
+    description: Commands to take screenshots
 components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
   schemas:
     Status:
       type: object
@@ -43,6 +47,75 @@ components:
           type: boolean
         message:
           type: string
+    Success:
+      type: object
+      properties:
+        value:
+          type: object
+          nullable: true
+          properties:
+            data:
+              type: object          
+    Error:
+      type: object
+      properties:
+        value:
+          type: object
+          properties:
+            error:
+              type: string
+            message:
+              type: string
+            stacktrace:
+              type: string
+            data:
+              type: object
+              additionalProperties:
+                type: object              
+    CapabilityValue:
+      oneOf:
+        - type: string
+        - type: integer
+        - type: boolean
+        - type: object
+    Capabilities:
+      type: object
+      additionalProperties:
+        type: object
+    NewSessionRequest:
+      type: object
+      properties:
+        capabilities:
+          type: object
+          properties:
+            alwaysMatch:
+              type: object
+              $ref: '#/components/schemas/Capabilities'
+            firstMatch:
+              type: array
+              items:
+                $ref: '#/components/schemas/Capabilities'
+    NewSessionResponse:
+      type: object
+      properties:
+        value:
+          type: object
+          properties:
+            sessionId:
+              type: string
+            capabilities:
+              type: string
+              $ref: '#/components/schemas/Capabilities'
+    UrlRequest:
+      type: object
+      properties:
+        capabilities:
+          type: object
+          properties:
+            url:
+              type: string
+security:
+  - BasicAuth
 paths:
   /status:
     get:
@@ -57,3 +130,116 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Status'
+  /session:
+    post:
+      tags:
+        - session      
+      summary: Creates new Selenium session
+      operationId: createSession
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewSessionRequest'
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewSessionResponse'
+        500:
+          description: new session error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /session/{sessionId}:
+    delete:
+      tags:
+        - session      
+      summary: Deletes existing Selenium session
+      operationId: deleteSession
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"      
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        404:
+          description: invalid session id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /session/{sessionId}/url:
+    post:
+      tags:
+        - navigation      
+      summary: Navigates to URL
+      operationId: navigateTo
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UrlRequest'            
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        404:
+          description: invalid session id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /session/{sessionId}/screenshot:
+    get:
+      tags:
+        - screenshot     
+      summary: Takes page screenshot
+      operationId: takeScreenshot
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        404:
+          description: invalid session id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
