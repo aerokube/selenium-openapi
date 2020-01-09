@@ -7,12 +7,31 @@ info:
     email: support@aerokube.com
   license:
     name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html  
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
 servers:
-  - url: http://localhost:4444/wd/hub
-    description: Local Selenium server
-  - url: http://localhost:4444/
-    description: Local WebDriver instance
+  - url: '{protocol}://{host}:{port}{path}'
+    description: Selenium WebDriver API
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: http
+      host:
+        default: localhost
+        description: Selenium host name
+      port:
+        description: Selenium port number
+        enum:
+          - '4444'
+          - '4445'
+        default: '4444'
+      path:
+        description: Selenium API base path
+        enum:
+          - '/wd/hub'
+          - '/'
+        default: '/wd/hub'
 tags:
   - name: misc
     description: Miscellaneous commands
@@ -29,9 +48,9 @@ tags:
   - name: cookie
     description: Commands to work with cookies
   - name: action
-    description: Actions like clicking on the buttons, moving the mouse and so on 
+    description: Actions like clicking on the buttons, moving the mouse and so on
   - name: prompt
-    description: Commands to work with alerts 
+    description: Commands to work with alerts
   - name: screenshot
     description: Commands to take screenshots
 components:
@@ -55,7 +74,7 @@ components:
           nullable: true
           properties:
             data:
-              type: object          
+              type: object
     Error:
       type: object
       properties:
@@ -71,7 +90,7 @@ components:
             data:
               type: object
               additionalProperties:
-                type: object              
+                type: object
     CapabilityValue:
       oneOf:
         - type: string
@@ -82,6 +101,7 @@ components:
       type: object
       additionalProperties:
         type: object
+        $ref: '#/components/schemas/CapabilityValue'
     NewSessionRequest:
       type: object
       properties:
@@ -114,15 +134,13 @@ components:
           properties:
             url:
               type: string
-security:
-  - BasicAuth
 paths:
   /status:
     get:
       tags:
-        - misc      
+        - misc
       summary: Gets Selenium API status information
-      operationId: getStatus      
+      operationId: getStatus
       responses:
         200:
           description: successful operation
@@ -133,8 +151,10 @@ paths:
   /session:
     post:
       tags:
-        - session      
+        - session
       summary: Creates new Selenium session
+      security:
+        - BasicAuth: []
       operationId: createSession
       requestBody:
         required: true
@@ -159,7 +179,7 @@ paths:
   /session/{sessionId}:
     delete:
       tags:
-        - session      
+        - session
       summary: Deletes existing Selenium session
       operationId: deleteSession
       parameters:
@@ -168,7 +188,7 @@ paths:
           description: "Requested session ID"
           required: true
           schema:
-            type: "string"      
+            type: "string"
       responses:
         200:
           description: successful operation
@@ -186,7 +206,7 @@ paths:
   /session/{sessionId}/url:
     post:
       tags:
-        - navigation      
+        - navigation
       summary: Navigates to URL
       operationId: navigateTo
       parameters:
@@ -201,7 +221,40 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UrlRequest'            
+              $ref: '#/components/schemas/UrlRequest'
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        404:
+          description: invalid session id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /session/{sessionId}/timeouts:
+    post:
+      tags:
+        - session
+      summary: Adjusts session timeouts
+      operationId: setTimeouts
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UrlRequest'
       responses:
         200:
           description: successful operation
@@ -219,7 +272,7 @@ paths:
   /session/{sessionId}/screenshot:
     get:
       tags:
-        - screenshot     
+        - screenshot
       summary: Takes page screenshot
       operationId: takeScreenshot
       parameters:
