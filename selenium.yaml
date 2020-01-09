@@ -126,14 +126,20 @@ components:
             capabilities:
               type: string
               $ref: '#/components/schemas/Capabilities'
+    TimeoutRequest:
+      type: object
+      properties:
+        script:
+          type: string
+        pageLoad:
+          type: string
+        implicit:
+          type: string
     UrlRequest:
       type: object
       properties:
-        capabilities:
-          type: object
-          properties:
-            url:
-              type: string
+        url:
+          type: string
 paths:
   /status:
     get:
@@ -169,6 +175,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/NewSessionResponse'
+        401:
+          description: invalid username or password
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         500:
           description: new session error
           content:
@@ -254,7 +266,33 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UrlRequest'
+              $ref: '#/components/schemas/TimeoutRequest'
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        404:
+          description: invalid session id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    get:
+      tags:
+        - session
+      summary: Get session timeouts
+      operationId: getTimeouts
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"
       responses:
         200:
           description: successful operation
