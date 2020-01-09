@@ -1,4 +1,4 @@
-openapi: 3.0.1
+openapi: 3.0.2
 info:
   title: Selenium WebDriver
   description: '[Selenium WebDriver](https://www.w3.org/TR/webdriver) API specification'
@@ -62,19 +62,19 @@ components:
     Status:
       type: object
       properties:
-        ready:
-          type: boolean
-        message:
-          type: string
+        value:
+          type: object
+          properties:
+            ready:
+              type: boolean
+            message:
+              type: string
     Success:
       type: object
       properties:
         value:
           type: object
           nullable: true
-          properties:
-            data:
-              type: object
     Error:
       type: object
       properties:
