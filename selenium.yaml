@@ -146,6 +146,52 @@ components:
       properties:
         url:
           type: string
+    ScriptRequest:
+      type: object
+      properties:
+        script:
+          type: string
+        args:
+          type: array
+          items:
+            type: string
+    Cookie:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+        path:
+          type: string
+        domain:
+          type: string
+        secure:
+          type: boolean
+        httpOnly:
+          type: boolean
+        expiry:
+          type: integer
+    CookiesResponse:
+      type: object
+      properties:
+        value:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/Cookie'
+    CookieRequest:
+      type: object
+      properties:
+        cookie:
+          type: object
+          $ref: '#/components/schemas/Cookie'
+    CookieResponse:
+      type: object
+      properties:
+        value:
+          type: object
+          $ref: '#/components/schemas/Cookie'
     SwitchToWindowRequest:
       type: object
       properties:
@@ -198,6 +244,11 @@ components:
         height:
           type: integer
           minimum: 0
+    SendAlertTextRequest:
+      type: object
+      properties:
+        text:
+          type: string
 paths:
   /status:
     get:
@@ -798,6 +849,12 @@ paths:
           required: true
           schema:
             type: "string"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WindowRect'
       responses:
         200:
           description: successful operation
@@ -936,6 +993,424 @@ paths:
                 $ref: '#/components/schemas/Error'
         500:
           description: unsupported operation or unexpected alert open
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /session/{sessionId}/source:
+    get:
+      tags:
+        - document
+      summary: Get page source
+      operationId: getPageSource
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        404:
+          description: invalid session id or no such window
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: unsupported operation or unexpected alert open
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /session/{sessionId}/execute/sync:
+    post:
+      tags:
+        - document
+      summary: Execute script
+      operationId: executeScript
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScriptRequest'
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        404:
+          description: invalid session id or no such window
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: unsupported operation or unexpected alert open or script timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /session/{sessionId}/execute/async:
+    post:
+      tags:
+        - document
+      summary: Execute script asynchronously
+      operationId: executeScriptAsync
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScriptRequest'
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        404:
+          description: invalid session id or no such window
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: unsupported operation or unexpected alert open or script timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /session/{sessionId}/cookie:
+    get:
+      tags:
+        - cookies
+      summary: Get all cookies
+      operationId: getAllCookies
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CookiesResponse'
+        404:
+          description: invalid session id or no such window
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: unsupported operation or unexpected alert open
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      tags:
+        - cookies
+      summary: Add cookie
+      operationId: addCookie
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        400:
+          description: invalid argument or invalid cookie domain
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: invalid session id or no such window
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: unsupported operation or unexpected alert open or unable to set cookie
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - cookies
+      summary: Delete all cookies
+      operationId: deleteAllCookies
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        404:
+          description: invalid session id or no such window
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: unsupported operation or unexpected alert open
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /session/{sessionId}/cookie/{name}:
+    get:
+      tags:
+        - cookies
+      summary: Get named cookie
+      operationId: getNamedCookie
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"
+        - name: "name"
+          in: "path"
+          description: "Cookie name"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CookieResponse'
+        404:
+          description: invalid session id or no such window or no such cookie
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: unsupported operation or unexpected alert open
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - cookies
+      summary: Delete cookie
+      operationId: deleteCookie
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"
+        - name: "name"
+          in: "path"
+          description: "Cookie name"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        404:
+          description: invalid session id or no such window
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: unsupported operation or unexpected alert open
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /session/{sessionId}/alert/dismiss:
+    post:
+      tags:
+        - prompts
+      summary: Dismiss alert
+      operationId: dismissAlert
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        404:
+          description: invalid session id or no such window or no such alert
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /session/{sessionId}/alert/accept:
+    post:
+      tags:
+        - prompts
+      summary: Accept alert
+      operationId: acceptAlert
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        404:
+          description: invalid session id or no such window or no such alert
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /session/{sessionId}/alert/text:
+    post:
+      tags:
+        - prompts
+      summary: Send alert text
+      operationId: sendAlertText
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendAlertTextRequest'
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        400:
+          description: invalid argument or element not interactable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: invalid session id or no such window or no such alert
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: unsupported operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    get:
+      tags:
+        - prompts
+      summary: Get alert text
+      operationId: getAlertText
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        400:
+          description: invalid argument or element not interactable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: invalid session id or no such window or no such alert
           content:
             application/json:
               schema:
