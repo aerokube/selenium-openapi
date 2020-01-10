@@ -216,6 +216,31 @@ paths:
                 $ref: '#/components/schemas/Error'
 
   /session/{sessionId}/url:
+    get:
+      tags:
+        - navigation
+      summary: Returns current URL
+      operationId: getCurrentUrl
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        404:
+          description: invalid session id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     post:
       tags:
         - navigation
@@ -248,7 +273,139 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  /session/{sessionId}/back:
+    post:
+      tags:
+        - navigation
+      summary: Navigates to the previous page
+      operationId: navigateBack
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        404:
+          description: invalid session id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /session/{sessionId}/forward:
+    post:
+      tags:
+        - navigation
+      summary: Navigates to the next page
+      operationId: navigateForward
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        404:
+          description: invalid session id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /session/{sessionId}/refresh:
+    post:
+      tags:
+        - navigation
+      summary: Reloads current page
+      operationId: refreshPage
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        404:
+          description: invalid session id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /session/{sessionId}/title:
+    get:
+      tags:
+        - navigation
+      summary: Returns current page title
+      operationId: getPageTitle
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        404:
+          description: invalid session id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
   /session/{sessionId}/timeouts:
+    get:
+      tags:
+        - session
+      summary: Get session timeouts
+      operationId: getTimeouts
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        404:
+          description: invalid session id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     post:
       tags:
         - session
@@ -267,32 +424,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/TimeoutRequest'
-      responses:
-        200:
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Success'
-        404:
-          description: invalid session id
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-
-    get:
-      tags:
-        - session
-      summary: Get session timeouts
-      operationId: getTimeouts
-      parameters:
-        - name: "sessionId"
-          in: "path"
-          description: "Requested session ID"
-          required: true
-          schema:
-            type: "string"
       responses:
         200:
           description: successful operation
