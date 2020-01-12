@@ -6,7 +6,7 @@ This repository contains Selenium OpenAPI 3.0 (ex-Swagger) spec.
 
 1) Launch Swagger Editor Docker container:
 ```
-$ docker run -d -p 8080:8080 swaggerapi/swagger-editor
+$ docker run -d --name swagger-editor -p 8080:8080 swaggerapi/swagger-editor
 ```
 
 2) Open `http://localhost:8080/` in browser.
