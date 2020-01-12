@@ -69,12 +69,30 @@ components:
               type: boolean
             message:
               type: string
-    Success:
+    Empty:
       type: object
       properties:
         value:
-          type: object
+          description: "Always null value"
+          type: string
           nullable: true
+    String:
+      type: object
+      properties:
+        value:
+          type: string
+    NullableString:
+      type: object
+      properties:
+        value:
+          description: "String that can sometimes have null value"
+          type: string
+          nullable: true
+    Boolean:
+      type: object
+      properties:
+        value:
+          type: boolean
     Error:
       type: object
       properties:
@@ -91,6 +109,55 @@ components:
               type: object
               additionalProperties:
                 type: object
+    Proxy:
+      type: object
+      properties:
+        proxyType:
+          type: string
+          enum: [pac, direct, autodetect, system, manual]
+        proxyAutoconfigUrl:
+          type: string
+        ftpProxy:
+          type: string
+        httpProxy:
+          type: string
+        noProxy:
+          type: array
+          items:
+            type: string
+        sslProxy:
+          type: string
+        socksProxy:
+          type: string
+        socksVersion:
+          type: integer
+          minimum: 0
+          maximum: 255
+    StandardCapabilities:
+      type: object
+      properties:
+        browserName:
+          type: string
+        browserVersion:
+          type: string
+        platformName:
+          type: string
+        acceptInsecureCerts:
+          type: boolean
+        pageLoadStrategy:
+          type: string
+          enum: [none, eager, normal]
+        proxy:
+          $ref: '#/components/schemas/Proxy'
+        setWindowRect:
+          type: boolean
+        timeouts:
+          $ref: '#/components/schemas/Timeouts'
+        strictFileInteractability:
+          type: boolean
+        unhandledPromptBehavior:
+          type: string
+          enum: ["dismiss", "accept", "dismiss and notify", "accept and notify", "ignore"]
     CapabilityValue:
       oneOf:
         - type: string
@@ -98,9 +165,11 @@ components:
         - type: boolean
         - type: object
     Capabilities:
-      type: object
-      additionalProperties:
-        $ref: '#/components/schemas/CapabilityValue'
+      allOf:
+        - $ref: '#/components/schemas/StandardCapabilities'
+        - type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CapabilityValue'
     NewSessionRequest:
       type: object
       properties:
@@ -125,20 +194,20 @@ components:
               type: string
             capabilities:
               $ref: '#/components/schemas/Capabilities'
-    TimeoutsRequest:
+    Timeouts:
       type: object
       properties:
         script:
-          type: string
+          type: integer
         pageLoad:
-          type: string
+          type: integer
         implicit:
-          type: string
+          type: integer
     TimeoutsResponse:
       type: object
       properties:
         value:
-          $ref: '#/components/schemas/TimeoutsRequest'
+          $ref: '#/components/schemas/Timeouts'
     UrlRequest:
       type: object
       properties:
@@ -277,19 +346,6 @@ components:
             additionalProperties:
               type: string
           description: "A list of web element identifier to web element reference mappings"
-    ElementBooleanResponse:
-      type: object
-      properties:
-        value:
-          type: boolean
-          description: "Whether element is selected or enabled (depends on request)"
-    GetElementResponse:
-      type: object
-      properties:
-        value:
-          type: string
-          nullable: true
-          description: "Element attribute, property, CSS value, text, tag name and so on (depends on request)"
     ElementSendKeysRequest:
       type: object
       properties:
@@ -344,9 +400,7 @@ components:
         actions:
           type: array
           items:
-            type: object
-            additionalProperties:
-              $ref: '#/components/schemas/ActionSequence'
+            $ref: '#/components/schemas/ActionSequence'
           description: "A list of actions to be performed"
       required:
         - actions
@@ -424,7 +478,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Success'
+                $ref: '#/components/schemas/Empty'
         404:
           description: invalid session id
           content:
@@ -475,14 +529,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TimeoutsRequest'
+              $ref: '#/components/schemas/Timeouts'
       responses:
         200:
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Success'
+                $ref: '#/components/schemas/Empty'
         404:
           description: invalid session id
           content:
@@ -509,7 +563,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Success'
+                $ref: '#/components/schemas/String'
         404:
           description: invalid session id or no such window
           content:
@@ -546,7 +600,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Success'
+                $ref: '#/components/schemas/Empty'
         400:
           description: insecure certificate
           content:
@@ -585,7 +639,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Success'
+                $ref: '#/components/schemas/Empty'
         404:
           description: invalid session id or no such window
           content:
@@ -618,7 +672,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Success'
+                $ref: '#/components/schemas/Empty'
         404:
           description: invalid session id or no such window
           content:
@@ -651,7 +705,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Success'
+                $ref: '#/components/schemas/Empty'
         404:
           description: invalid session id or no such window
           content:
@@ -684,7 +738,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Success'
+                $ref: '#/components/schemas/String'
         404:
           description: invalid session id or no such window
           content:
@@ -717,7 +771,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Success'
+                $ref: '#/components/schemas/String'
         404:
           description: invalid session id or no such window
           content:
@@ -754,7 +808,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Success'
+                $ref: '#/components/schemas/Empty'
         404:
           description: invalid session id or no such window
           content:
@@ -785,7 +839,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Success'
+                $ref: '#/components/schemas/GetWindowHandlesResponse'
         404:
           description: invalid session id or no such window
           content:
@@ -818,7 +872,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Success'
+                $ref: '#/components/schemas/GetWindowHandlesResponse'
         404:
           description: invalid session id or no such window
           content:
@@ -857,7 +911,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Success'
+                $ref: '#/components/schemas/NewWindowResponse'
         404:
           description: invalid session id or no such window
           content:
@@ -896,7 +950,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Success'
+                $ref: '#/components/schemas/Empty'
         400:
           description: invalid argument
           content:
@@ -935,7 +989,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Success'
+                $ref: '#/components/schemas/Empty'
         404:
           description: invalid session id or no such window
           content:
@@ -1392,7 +1446,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ElementBooleanResponse'
+                $ref: '#/components/schemas/Boolean'
         404:
           description: invalid session id or no such window or no such element
           content:
@@ -1437,7 +1491,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetElementResponse'
+                $ref: '#/components/schemas/NullableString'
         404:
           description: invalid session id or no such window or no such element
           content:
@@ -1482,7 +1536,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetElementResponse'
+                $ref: '#/components/schemas/NullableString'
         404:
           description: invalid session id or no such window or no such element
           content:
@@ -1527,7 +1581,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetElementResponse'
+                $ref: '#/components/schemas/String'
         404:
           description: invalid session id or no such window or no such element
           content:
@@ -1566,7 +1620,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetElementResponse'
+                $ref: '#/components/schemas/String'
         404:
           description: invalid session id or no such window or no such element
           content:
@@ -1605,7 +1659,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetElementResponse'
+                $ref: '#/components/schemas/String'
         404:
           description: invalid session id or no such window or no such element
           content:
@@ -1683,7 +1737,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ElementBooleanResponse'
+                $ref: '#/components/schemas/Boolean'
         404:
           description: invalid session id or no such window or no such element
           content:
@@ -1722,7 +1776,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Success'
+                $ref: '#/components/schemas/Empty'
         400:
           description: invalid argument or element not interactable or element click intercepted
           content:
@@ -1767,7 +1821,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Success'
+                $ref: '#/components/schemas/Empty'
         400:
           description: invalid argument or element not interactable or invalid element state
           content:
@@ -1818,7 +1872,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Success'
+                $ref: '#/components/schemas/Empty'
         400:
           description: invalid argument or element not interactable
           content:
@@ -1857,7 +1911,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Success'
+                $ref: '#/components/schemas/String'
         404:
           description: invalid session id or no such window
           content:
@@ -1896,7 +1950,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Success'
+                $ref: '#/components/schemas/String'
         404:
           description: invalid session id or no such window
           content:
@@ -1935,7 +1989,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Success'
+                $ref: '#/components/schemas/String'
         404:
           description: invalid session id or no such window
           content:
@@ -1993,13 +2047,19 @@ paths:
           required: true
           schema:
             type: "string"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CookieRequest'
       responses:
         200:
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Success'
+                $ref: '#/components/schemas/Empty'
         400:
           description: invalid argument or invalid cookie domain
           content:
@@ -2036,7 +2096,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Success'
+                $ref: '#/components/schemas/Empty'
         404:
           description: invalid session id or no such window
           content:
@@ -2112,7 +2172,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Success'
+                $ref: '#/components/schemas/Empty'
         404:
           description: invalid session id or no such window
           content:
@@ -2151,7 +2211,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Success'
+                $ref: '#/components/schemas/Empty'
         400:
           description: invalid argument
           content:
@@ -2188,7 +2248,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Success'
+                $ref: '#/components/schemas/Empty'
         400:
           description: invalid argument
           content:
@@ -2227,7 +2287,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Success'
+                $ref: '#/components/schemas/Empty'
         404:
           description: invalid session id or no such window or no such alert
           content:
@@ -2254,7 +2314,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Success'
+                $ref: '#/components/schemas/Empty'
         404:
           description: invalid session id or no such window or no such alert
           content:
@@ -2287,7 +2347,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Success'
+                $ref: '#/components/schemas/Empty'
         400:
           description: invalid argument or element not interactable
           content:
@@ -2324,7 +2384,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Success'
+                $ref: '#/components/schemas/String'
         400:
           description: invalid argument or element not interactable
           content:
@@ -2357,7 +2417,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Success'
+                $ref: '#/components/schemas/String'
         404:
           description: invalid session id or no such window
           content:
@@ -2396,7 +2456,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Success'
+                $ref: '#/components/schemas/String'
         404:
           description: invalid session id or no such window
           content:
@@ -2409,4 +2469,3 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-
