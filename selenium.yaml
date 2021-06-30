@@ -59,7 +59,7 @@ components:
       type: http
       scheme: basic
   schemas:
-    Status:
+    StatusResponse:
       type: object
       properties:
         value:
@@ -69,31 +69,31 @@ components:
               type: boolean
             message:
               type: string
-    Empty:
+    EmptyResponse:
       type: object
       properties:
         value:
           description: "Always null value"
           type: string
           nullable: true
-    String:
+    StringResponse:
       type: object
       properties:
         value:
           type: string
-    NullableString:
+    NullableStringResponse:
       type: object
       properties:
         value:
           description: "String that can sometimes have null value"
           type: string
           nullable: true
-    Boolean:
+    BooleanResponse:
       type: object
       properties:
         value:
           type: boolean
-    Error:
+    ErrorResponse:
       type: object
       properties:
         value:
@@ -424,7 +424,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Status'
+                $ref: '#/components/schemas/StatusResponse'
   /session:
     post:
       tags:
@@ -451,13 +451,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: session not created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}:
     delete:
@@ -478,13 +478,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Empty'
+                $ref: '#/components/schemas/EmptyResponse'
         404:
           description: invalid session id
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/timeouts:
     get:
@@ -511,7 +511,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
     post:
       tags:
         - timeouts
@@ -536,13 +536,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Empty'
+                $ref: '#/components/schemas/EmptyResponse'
         404:
           description: invalid session id
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/url:
     get:
@@ -563,19 +563,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/String'
+                $ref: '#/components/schemas/StringResponse'
         404:
           description: invalid session id or no such window
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unexpected alert open
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
     post:
       tags:
         - navigation
@@ -600,25 +600,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Empty'
+                $ref: '#/components/schemas/EmptyResponse'
         400:
           description: insecure certificate
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         404:
           description: invalid session id or no such window
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unexpected alert open or timeout
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/back:
     post:
@@ -639,19 +639,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Empty'
+                $ref: '#/components/schemas/EmptyResponse'
         404:
           description: invalid session id or no such window
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unexpected alert open or timeout
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/forward:
     post:
@@ -672,19 +672,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Empty'
+                $ref: '#/components/schemas/EmptyResponse'
         404:
           description: invalid session id or no such window
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unexpected alert open or timeout
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/refresh:
     post:
@@ -705,19 +705,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Empty'
+                $ref: '#/components/schemas/EmptyResponse'
         404:
           description: invalid session id or no such window
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unexpected alert open or timeout
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/title:
     get:
@@ -738,19 +738,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/String'
+                $ref: '#/components/schemas/StringResponse'
         404:
           description: invalid session id or no such window
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unexpected alert open
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/window:
     get:
@@ -771,19 +771,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/String'
+                $ref: '#/components/schemas/StringResponse'
         404:
           description: invalid session id or no such window
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unexpected alert open
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
     post:
       tags:
         - contexts
@@ -808,19 +808,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Empty'
+                $ref: '#/components/schemas/EmptyResponse'
         404:
           description: invalid session id or no such window
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unexpected alert open
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
     delete:
       tags:
         - contexts
@@ -845,13 +845,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unexpected alert open
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/window/handles:
     get:
@@ -878,13 +878,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unexpected alert open
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/window/new:
     post:
@@ -917,13 +917,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unexpected alert open or unsupported operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/window/frame:
     post:
@@ -950,25 +950,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Empty'
+                $ref: '#/components/schemas/EmptyResponse'
         400:
           description: invalid argument
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         404:
           description: invalid session id or no such window or no such frame
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unexpected alert open
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/window/frame/parent:
     post:
@@ -989,19 +989,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Empty'
+                $ref: '#/components/schemas/EmptyResponse'
         404:
           description: invalid session id or no such window
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unexpected alert open
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/window/rect:
     get:
@@ -1028,13 +1028,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unexpected alert open or unsupported operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
     post:
       tags:
         - contexts
@@ -1065,19 +1065,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         404:
           description: invalid session id or no such window
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unsupported operation or unexpected alert open
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/window/maximize:
     post:
@@ -1104,19 +1104,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         404:
           description: invalid session id or no such window
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unsupported operation or unexpected alert open
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/window/minimize:
     post:
@@ -1143,19 +1143,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         404:
           description: invalid session id or no such window
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unsupported operation or unexpected alert open
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/window/fullscreen:
     post:
@@ -1182,19 +1182,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         404:
           description: invalid session id or no such window
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unsupported operation or unexpected alert open
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/element:
     post:
@@ -1227,19 +1227,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         404:
           description: invalid session id or no such window or no such element
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unexpected alert open
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/elements:
     post:
@@ -1272,19 +1272,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         404:
           description: invalid session id or no such window or no such element
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unexpected alert open
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/element/{elementId}/element:
     post:
@@ -1323,19 +1323,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         404:
           description: invalid session id or no such window or no such element
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unexpected alert open
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/element/{elementId}/elements:
     post:
@@ -1374,19 +1374,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         404:
           description: invalid session id or no such window or no such element
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unexpected alert open
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/element/active:
     get:
@@ -1413,13 +1413,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unexpected alert open
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/element/{elementId}/selected:
     get:
@@ -1446,19 +1446,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Boolean'
+                $ref: '#/components/schemas/BooleanResponse'
         404:
           description: invalid session id or no such window or no such element
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unexpected alert open
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/element/{elementId}/attribute/{name}:
     get:
@@ -1491,19 +1491,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/NullableString'
+                $ref: '#/components/schemas/NullableStringResponse'
         404:
           description: invalid session id or no such window or no such element
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unexpected alert open
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/element/{elementId}/property/{name}:
     get:
@@ -1536,19 +1536,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/NullableString'
+                $ref: '#/components/schemas/NullableStringResponse'
         404:
           description: invalid session id or no such window or no such element
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unexpected alert open
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/element/{elementId}/css/{propertyName}:
     get:
@@ -1581,19 +1581,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/String'
+                $ref: '#/components/schemas/StringResponse'
         404:
           description: invalid session id or no such window or no such element
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unexpected alert open
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/element/{elementId}/text:
     get:
@@ -1620,19 +1620,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/String'
+                $ref: '#/components/schemas/StringResponse'
         404:
           description: invalid session id or no such window or no such element
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unexpected alert open
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/element/{elementId}/name:
     get:
@@ -1659,19 +1659,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/String'
+                $ref: '#/components/schemas/StringResponse'
         404:
           description: invalid session id or no such window or no such element
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unexpected alert open
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/element/{elementId}/rect:
     get:
@@ -1704,13 +1704,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unexpected alert open
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/element/{elementId}/enabled:
     get:
@@ -1737,19 +1737,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Boolean'
+                $ref: '#/components/schemas/BooleanResponse'
         404:
           description: invalid session id or no such window or no such element
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unexpected alert open
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/element/{elementId}/click:
     post:
@@ -1776,25 +1776,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Empty'
+                $ref: '#/components/schemas/EmptyResponse'
         400:
           description: invalid argument or element not interactable or element click intercepted
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         404:
           description: invalid session id or no such window or no such element
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unexpected alert open
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/element/{elementId}/clear:
     post:
@@ -1821,25 +1821,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Empty'
+                $ref: '#/components/schemas/EmptyResponse'
         400:
           description: invalid argument or element not interactable or invalid element state
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         404:
           description: invalid session id or no such window or no such element
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unexpected alert open
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/element/{elementId}/value:
     post:
@@ -1872,25 +1872,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Empty'
+                $ref: '#/components/schemas/EmptyResponse'
         400:
           description: invalid argument or element not interactable
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         404:
           description: invalid session id or no such window or no such element
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unexpected alert open
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/source:
     get:
@@ -1911,19 +1911,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/String'
+                $ref: '#/components/schemas/StringResponse'
         404:
           description: invalid session id or no such window
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unsupported operation or unexpected alert open
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/execute/sync:
     post:
@@ -1950,19 +1950,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/String'
+                $ref: '#/components/schemas/StringResponse'
         404:
           description: invalid session id or no such window
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unsupported operation or unexpected alert open or script timeout or javascript error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/execute/async:
     post:
@@ -1989,19 +1989,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/String'
+                $ref: '#/components/schemas/StringResponse'
         404:
           description: invalid session id or no such window
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unsupported operation or unexpected alert open or script timeout or javascript error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/cookie:
     get:
@@ -2028,13 +2028,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unsupported operation or unexpected alert open
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
     post:
       tags:
         - cookies
@@ -2059,25 +2059,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Empty'
+                $ref: '#/components/schemas/EmptyResponse'
         400:
           description: invalid argument or invalid cookie domain
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         404:
           description: invalid session id or no such window
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unsupported operation or unexpected alert open or unable to set cookie
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
     delete:
       tags:
         - cookies
@@ -2096,19 +2096,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Empty'
+                $ref: '#/components/schemas/EmptyResponse'
         404:
           description: invalid session id or no such window
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unsupported operation or unexpected alert open
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/cookie/{name}:
     get:
@@ -2141,13 +2141,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unsupported operation or unexpected alert open
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
     delete:
       tags:
         - cookies
@@ -2172,19 +2172,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Empty'
+                $ref: '#/components/schemas/EmptyResponse'
         404:
           description: invalid session id or no such window
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unsupported operation or unexpected alert open
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/actions:
     post:
@@ -2211,25 +2211,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Empty'
+                $ref: '#/components/schemas/EmptyResponse'
         400:
           description: invalid argument
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         404:
           description: invalid session id or no such window
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unexpected alert open
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
     delete:
       tags:
         - actions
@@ -2248,25 +2248,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Empty'
+                $ref: '#/components/schemas/EmptyResponse'
         400:
           description: invalid argument
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         404:
           description: invalid session id or no such window
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unexpected alert open
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/alert/dismiss:
     post:
@@ -2287,13 +2287,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Empty'
+                $ref: '#/components/schemas/EmptyResponse'
         404:
           description: invalid session id or no such window or no such alert
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/alert/accept:
     post:
@@ -2314,13 +2314,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Empty'
+                $ref: '#/components/schemas/EmptyResponse'
         404:
           description: invalid session id or no such window or no such alert
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/alert/text:
     post:
@@ -2347,25 +2347,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Empty'
+                $ref: '#/components/schemas/EmptyResponse'
         400:
           description: invalid argument or element not interactable
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         404:
           description: invalid session id or no such window or no such alert
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unsupported operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
     get:
       tags:
         - prompts
@@ -2384,19 +2384,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/String'
+                $ref: '#/components/schemas/StringResponse'
         400:
           description: invalid argument or element not interactable
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         404:
           description: invalid session id or no such window or no such alert
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/screenshot:
     get:
@@ -2417,19 +2417,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/String'
+                $ref: '#/components/schemas/StringResponse'
         404:
           description: invalid session id or no such window
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unsupported operation or unexpected alert open or unable to capture screen
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /session/{sessionId}/element/{elementId}/screenshot:
     get:
@@ -2456,16 +2456,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/String'
+                $ref: '#/components/schemas/StringResponse'
         404:
           description: invalid session id or no such window
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unsupported operation or unexpected alert open or unable to capture screen
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
