@@ -310,7 +310,7 @@ components:
           minimum: 0
       required:
         - x
-        - y
+        - 'y'
         - width
         - height
     LocatorStrategy:
