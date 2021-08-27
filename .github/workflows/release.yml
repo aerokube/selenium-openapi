@@ -1,0 +1,23 @@
+name: release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  selenium-openapi-release:
+    runs-on: ubuntu-latest
+    if: github.repository == 'aerokube/selenium-openapi'
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Test
+        run: ci/test.sh
+
+      - name: Prepare release version
+        run: echo "RELEASE_VERSION=${GITHUB_REF:10}" >> $GITHUB_ENV
+
+      - uses: AButler/upload-release-assets@v2.0
+        with:
+          files: 'selenium.yaml'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
