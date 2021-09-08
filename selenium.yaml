@@ -194,6 +194,11 @@ components:
               type: string
             capabilities:
               $ref: '#/components/schemas/Capabilities'
+          required:
+            - sessionId
+            - capabilities
+      required:
+        - value
     Timeouts:
       type: object
       properties:
@@ -208,6 +213,8 @@ components:
       properties:
         value:
           $ref: '#/components/schemas/Timeouts'
+      required:
+        - value
     UrlRequest:
       type: object
       properties:
@@ -248,6 +255,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Cookie'
+      required:
+        - value
     CookieRequest:
       type: object
       properties:
@@ -260,6 +269,8 @@ components:
       properties:
         value:
           $ref: '#/components/schemas/Cookie'
+      required:
+        - value
     SwitchToWindowRequest:
       type: object
       properties:
@@ -274,6 +285,8 @@ components:
           type: array
           items:
             type: string
+      required:
+        - value
     NewWindowRequest:
       type: object
       properties:
@@ -293,6 +306,11 @@ components:
             type:
               type: string
               enum: [tab, window]
+          required:
+            - handle
+            - type
+      required:
+        - value
     Rect:
       type: object
       properties:
@@ -336,6 +354,8 @@ components:
           additionalProperties:
             type: string
           description: "Web element identifier to web element reference mapping"
+      required:
+        - value
     FindElementsResponse:
       type: object
       properties:
@@ -346,6 +366,8 @@ components:
             additionalProperties:
               type: string
           description: "A list of web element identifier to web element reference mappings"
+      required:
+        - value
     ElementSendKeysRequest:
       type: object
       properties:
