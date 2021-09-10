@@ -133,8 +133,16 @@ components:
           type: integer
           minimum: 0
           maximum: 255
-    StandardCapabilities:
+    CapabilityValue:
+      oneOf:
+        - type: string
+        - type: integer
+        - type: boolean
+        - type: object
+    Capabilities:
       type: object
+      additionalProperties:
+        $ref: '#/components/schemas/CapabilityValue'
       properties:
         browserName:
           type: string
@@ -158,18 +166,6 @@ components:
         unhandledPromptBehavior:
           type: string
           enum: ["dismiss", "accept", "dismiss and notify", "accept and notify", "ignore"]
-    CapabilityValue:
-      oneOf:
-        - type: string
-        - type: integer
-        - type: boolean
-        - type: object
-    Capabilities:
-      allOf:
-        - $ref: '#/components/schemas/StandardCapabilities'
-        - type: object
-          additionalProperties:
-            $ref: '#/components/schemas/CapabilityValue'
     NewSessionRequest:
       type: object
       properties:
