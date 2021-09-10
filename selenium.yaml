@@ -69,6 +69,9 @@ components:
               type: boolean
             message:
               type: string
+      required:
+        - ready
+        - message
     EmptyResponse:
       type: object
       properties:
@@ -81,6 +84,8 @@ components:
       properties:
         value:
           type: string
+      required:
+        - value
     NullableStringResponse:
       type: object
       properties:
@@ -93,6 +98,8 @@ components:
       properties:
         value:
           type: boolean
+      required:
+        - value
     ErrorResponse:
       type: object
       properties:
@@ -109,6 +116,12 @@ components:
               type: object
               additionalProperties:
                 type: object
+          required:
+            - error
+            - message
+            - stacktrace
+      required:
+        - value
     Proxy:
       type: object
       properties:
@@ -133,6 +146,8 @@ components:
           type: integer
           minimum: 0
           maximum: 255
+      required:
+        - proxyType
     CapabilityValue:
       oneOf:
         - type: string
