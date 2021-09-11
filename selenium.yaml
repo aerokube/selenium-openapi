@@ -148,16 +148,10 @@ components:
           maximum: 255
       required:
         - proxyType
-    CapabilityValue:
-      oneOf:
-        - type: string
-        - type: integer
-        - type: boolean
-        - type: object
     Capabilities:
       type: object
       additionalProperties:
-        $ref: '#/components/schemas/CapabilityValue'
+        type: object
       properties:
         browserName:
           type: string
