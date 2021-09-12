@@ -69,9 +69,11 @@ components:
               type: boolean
             message:
               type: string
+          required:
+            - ready
+            - message
       required:
-        - ready
-        - message
+        - value
     EmptyResponse:
       type: object
       properties:
@@ -209,10 +211,17 @@ components:
       properties:
         script:
           type: integer
+          format: int64
+          nullable: true
         pageLoad:
           type: integer
+          format: int64
         implicit:
           type: integer
+          format: int64
+      required:
+        - pageLoad
+        - implicit
     TimeoutsResponse:
       type: object
       properties:
