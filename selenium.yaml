@@ -69,9 +69,11 @@ components:
               type: boolean
             message:
               type: string
+          required:
+            - ready
+            - message
       required:
-        - ready
-        - message
+        - value
     EmptyResponse:
       type: object
       properties:
