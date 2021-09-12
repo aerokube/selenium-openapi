@@ -262,6 +262,9 @@ components:
           type: boolean
         expiry:
           type: integer
+        sameSite:
+          type: string
+          enum: [None, Lax, Strict]
     CookiesResponse:
       type: object
       properties:
