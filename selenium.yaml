@@ -262,9 +262,18 @@ components:
           type: boolean
         expiry:
           type: integer
+          format: int64
         sameSite:
           type: string
           enum: [None, Lax, Strict]
+      required:
+        - name
+        - value
+        - path
+        - domain
+        - secure
+        - httpOnly
+        - sameSite
     CookiesResponse:
       type: object
       properties:
