@@ -304,6 +304,23 @@ components:
           type: string
       required:
         - handle
+    SwitchToFrameRequest:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FrameId'
+    FrameId:
+      oneOf:
+        - type: integer
+          nullable: true
+        - $ref: '#/components/schemas/WebElement'
+    WebElement:
+      type: object
+      properties:
+        element-6066-11e4-a52e-4f735466cecf: # Such identifier is hard-coded to spec
+          type: string
+      required:
+        - element-6066-11e4-a52e-4f735466cecf
     GetWindowHandlesResponse:
       type: object
       properties:
@@ -991,7 +1008,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SwitchToWindowRequest'
+              $ref: '#/components/schemas/SwitchToFrameRequest'
       responses:
         200:
           description: successful operation
