@@ -1848,6 +1848,84 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
+  /session/{sessionId}/element/{elementId}/computedrole:
+    get:
+      tags:
+        - elements
+      summary: Get element computed accessibility role
+      operationId: getElementComputedRole
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"
+        - name: "elementId"
+          in: "path"
+          description: "Requested element ID"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StringResponse'
+        404:
+          description: invalid session id or no such window or no such element
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: unexpected alert open
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /session/{sessionId}/element/{elementId}/computedlabel:
+    get:
+      tags:
+        - elements
+      summary: Get element computed accessibility label
+      operationId: getElementComputedLabel
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"
+        - name: "elementId"
+          in: "path"
+          description: "Requested element ID"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StringResponse'
+        404:
+          description: invalid session id or no such window or no such element
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: unexpected alert open
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
   /session/{sessionId}/element/{elementId}/click:
     post:
       tags:
