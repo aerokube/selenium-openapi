@@ -456,7 +456,7 @@ components:
       properties:
         type:
           type: string
-          enum: [pause, keyDown, keyUp, pointerDown, pointerUp, pointerMove, pointerCancel]
+          enum: [pause, keyDown, keyUp, pointerDown, pointerUp, pointerMove, pointerCancel, scroll]
         value:
           type: string
         button:
@@ -480,7 +480,7 @@ components:
           type: string
         type:
           type: string
-          enum: [key, pointer, none]
+          enum: [key, pointer, wheel, none]
         parameters:
           type: object
           properties:
