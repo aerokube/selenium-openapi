@@ -102,6 +102,35 @@ components:
           type: boolean
       required:
         - value
+    ErrorCode:
+      type: string
+      enum:
+        - "element click intercepted"
+        - "element not interactable"
+        - "insecure certificate"
+        - "invalid argument"
+        - "invalid cookie domain"
+        - "invalid element state"
+        - "invalid selector"
+        - "invalid session id"
+        - "javascript error"
+        - "move target out of bounds"
+        - "no such alert"
+        - "no such cookie"
+        - "no such element"
+        - "no such frame"
+        - "no such window"
+        - "script timeout"
+        - "session not created"
+        - "stale element reference"
+        - "timeout"
+        - "unable to set cookie"
+        - "unable to capture screen"
+        - "unexpected alert open"
+        - "unknown command"
+        - "unknown error"
+        - "unknown method"
+        - "unsupported operation"
     ErrorResponse:
       type: object
       properties:
@@ -109,7 +138,7 @@ components:
           type: object
           properties:
             error:
-              type: string
+              $ref: '#/components/schemas/ErrorCode'
             message:
               type: string
             stacktrace:
@@ -304,6 +333,23 @@ components:
           type: string
       required:
         - handle
+    SwitchToFrameRequest:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/FrameId'
+    FrameId:
+      oneOf:
+        - type: integer
+          nullable: true
+        - $ref: '#/components/schemas/WebElement'
+    WebElement:
+      type: object
+      properties:
+        element-6066-11e4-a52e-4f735466cecf: # Such identifier is hard-coded to spec
+          type: string
+      required:
+        - element-6066-11e4-a52e-4f735466cecf
     GetWindowHandlesResponse:
       type: object
       properties:
@@ -377,9 +423,10 @@ components:
       properties:
         value:
           type: object
-          additionalProperties:
-            type: string
-          description: "Web element identifier to web element reference mapping"
+          properties:
+            element-6066-11e4-a52e-4f735466cecf:
+              type: string
+              description: "Web element identifier"
       required:
         - value
     FindElementsResponse:
@@ -389,9 +436,11 @@ components:
           type: array
           items:
             type: object
-            additionalProperties:
-              type: string
-          description: "A list of web element identifier to web element reference mappings"
+            properties:
+              element-6066-11e4-a52e-4f735466cecf:
+                type: string
+                description: "Web element identifier"
+          description: "A list of web element identifiers"
       required:
         - value
     ElementSendKeysRequest:
@@ -407,7 +456,7 @@ components:
       properties:
         type:
           type: string
-          enum: [pause, keyDown, keyUp, pointerDown, pointerUp, pointerMove, pointerCancel]
+          enum: [pause, keyDown, keyUp, pointerDown, pointerUp, pointerMove, pointerCancel, scroll]
         value:
           type: string
         button:
@@ -431,7 +480,7 @@ components:
           type: string
         type:
           type: string
-          enum: [key, pointer, none]
+          enum: [key, pointer, wheel, none]
         parameters:
           type: object
           properties:
@@ -991,7 +1040,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SwitchToWindowRequest'
+              $ref: '#/components/schemas/SwitchToFrameRequest'
       responses:
         200:
           description: successful operation
@@ -1602,8 +1651,8 @@ paths:
     get:
       tags:
         - elements
-      summary: Get element CSS value
-      operationId: getElementCSSValue
+      summary: Get element CSS property
+      operationId: getElementCSSProperty
       parameters:
         - name: "sessionId"
           in: "path"
@@ -1799,12 +1848,90 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
+  /session/{sessionId}/element/{elementId}/computedrole:
+    get:
+      tags:
+        - elements
+      summary: Get element computed accessibility role
+      operationId: getElementComputedRole
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"
+        - name: "elementId"
+          in: "path"
+          description: "Requested element ID"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StringResponse'
+        404:
+          description: invalid session id or no such window or no such element
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: unexpected alert open
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /session/{sessionId}/element/{elementId}/computedlabel:
+    get:
+      tags:
+        - elements
+      summary: Get element computed accessibility label
+      operationId: getElementComputedLabel
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"
+        - name: "elementId"
+          in: "path"
+          description: "Requested element ID"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StringResponse'
+        404:
+          description: invalid session id or no such window or no such element
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: unexpected alert open
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
   /session/{sessionId}/element/{elementId}/click:
     post:
       tags:
         - elements
       summary: Click on element
-      operationId: elementClicks
+      operationId: elementClick
       parameters:
         - name: "sessionId"
           in: "path"
