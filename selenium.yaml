@@ -51,6 +51,8 @@ tags:
     description: Actions like clicking on the buttons, moving the mouse and so on
   - name: prompts
     description: Commands to work with alerts
+  - name: print
+    description: Printing commands
   - name: screenshots
     description: Commands to take screenshots
 components:
@@ -508,6 +510,79 @@ components:
           type: string
       required:
         - text
+    PrintRequest:
+      type: object
+      properties:
+        options:
+          type: object
+          properties:
+            orientation:
+              type: string
+              enum: [portrait, landscape]
+              default: portrait
+            scale:
+              type: number
+              format: float
+              minimum: 0.1
+              maximum: 2.0
+              default: 1.0
+            background:
+              type: boolean
+              default: false
+              description: print page background
+            page:
+              type: object
+              properties:
+                width:
+                  type: number
+                  format: float
+                  minimum: 0
+                  default: 21.59
+                height:
+                  type: number
+                  format: float
+                  minimum: 0
+                  default: 27.94
+            margin:
+              type: object
+              properties:
+                top:
+                  type: number
+                  format: float
+                  minimum: 0
+                  default: 1
+                bottom:
+                  type: number
+                  format: float
+                  minimum: 0
+                  default: 1
+                left:
+                  type: number
+                  format: float
+                  minimum: 0
+                  default: 1
+                right:
+                  type: number
+                  format: float
+                  minimum: 0
+                  default: 1
+            shrinkToFit:
+              type: boolean
+              default: true
+            pageRanges:
+              type: array
+              items:
+                type: string
+          required:
+            - orientation
+            - scale
+            - background
+            - page
+            - margin
+            - shrinkToFit
+            - pageRanges
+      required:
+        - options
 paths:
   /status:
     get:
@@ -2640,6 +2715,51 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unsupported operation or unexpected alert open or unable to capture screen
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /session/{sessionId}/print:
+    post:
+      tags:
+        - print
+      summary: Print page to PDF
+      operationId: printPage
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PrintRequest'
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StringResponse'
+        400:
+          description: invalid argument
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: invalid session id or no such window
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: unsupported operation
           content:
             application/json:
               schema:
