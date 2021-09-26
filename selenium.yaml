@@ -1923,6 +1923,46 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
+  /session/{sessionId}/element/{elementId}/displayed:
+    get:
+      tags:
+        - elements
+      summary: Is element displayed
+      description: This operation is not considered a part of specification but is de-facto present in existing implementations.
+      operationId: isElementDisplayed
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"
+        - name: "elementId"
+          in: "path"
+          description: "Requested element ID"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BooleanResponse'
+        404:
+          description: invalid session id or no such window or no such element
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: unexpected alert open
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
   /session/{sessionId}/element/{elementId}/computedrole:
     get:
       tags:
