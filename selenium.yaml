@@ -250,9 +250,6 @@ components:
         implicit:
           type: integer
           format: int64
-      required:
-        - pageLoad
-        - implicit
     TimeoutsResponse:
       type: object
       properties:
