@@ -267,6 +267,10 @@ components:
           type: string
       required:
         - url
+    EmptyRequest:
+      type: object
+      additionalProperties:
+        type: object
     ScriptRequest:
       type: object
       properties:
@@ -805,6 +809,12 @@ paths:
           required: true
           schema:
             type: "string"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmptyRequest'
       responses:
         200:
           description: successful operation
@@ -838,6 +848,12 @@ paths:
           required: true
           schema:
             type: "string"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmptyRequest'
       responses:
         200:
           description: successful operation
@@ -871,6 +887,12 @@ paths:
           required: true
           schema:
             type: "string"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmptyRequest'
       responses:
         200:
           description: successful operation
@@ -1264,6 +1286,12 @@ paths:
           required: true
           schema:
             type: "string"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmptyRequest'
       responses:
         200:
           description: successful operation
@@ -1303,6 +1331,12 @@ paths:
           required: true
           schema:
             type: "string"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmptyRequest'
       responses:
         200:
           description: successful operation
@@ -1342,6 +1376,12 @@ paths:
           required: true
           schema:
             type: "string"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmptyRequest'
       responses:
         200:
           description: successful operation
@@ -2060,6 +2100,12 @@ paths:
           required: true
           schema:
             type: "string"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmptyRequest'
       responses:
         200:
           description: successful operation
@@ -2105,6 +2151,12 @@ paths:
           required: true
           schema:
             type: "string"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmptyRequest'
       responses:
         200:
           description: successful operation
@@ -2571,6 +2623,12 @@ paths:
           required: true
           schema:
             type: "string"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmptyRequest'
       responses:
         200:
           description: successful operation
@@ -2598,6 +2656,12 @@ paths:
           required: true
           schema:
             type: "string"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmptyRequest'
       responses:
         200:
           description: successful operation
