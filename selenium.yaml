@@ -250,9 +250,6 @@ components:
         implicit:
           type: integer
           format: int64
-      required:
-        - pageLoad
-        - implicit
     TimeoutsResponse:
       type: object
       properties:
@@ -271,6 +268,7 @@ components:
       type: object
       additionalProperties:
         type: object
+    AnyValue: {}
     ScriptRequest:
       type: object
       properties:
@@ -279,7 +277,14 @@ components:
         args:
           type: array
           items:
-            type: string
+            $ref: '#/components/schemas/AnyValue'
+    AnyResponse:
+      type: object
+      properties:
+        value:
+          $ref: '#/components/schemas/AnyValue'
+      required:
+        - value
     Cookie:
       type: object
       properties:
@@ -345,9 +350,9 @@ components:
         id:
           $ref: '#/components/schemas/FrameId'
     FrameId:
+      nullable: true
       oneOf:
         - type: integer
-          nullable: true
         - $ref: '#/components/schemas/WebElement'
     WebElement:
       type: object
@@ -409,6 +414,13 @@ components:
         - 'y'
         - width
         - height
+    RectResponse:
+      type: object
+      properties:
+        value:
+          $ref: '#/components/schemas/Rect'
+      required:
+        - value
     LocatorStrategy:
       type: string
       enum: ["css selector", "link text", "partial link text", "tag name", "xpath"]
@@ -1119,7 +1131,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
-  /session/{sessionId}/window/frame:
+  /session/{sessionId}/frame:
     post:
       tags:
         - contexts
@@ -1164,7 +1176,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
-  /session/{sessionId}/window/frame/parent:
+  /session/{sessionId}/frame/parent:
     post:
       tags:
         - contexts
@@ -1177,6 +1189,12 @@ paths:
           required: true
           schema:
             type: "string"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmptyRequest'
       responses:
         200:
           description: successful operation
@@ -1216,7 +1234,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Rect'
+                $ref: '#/components/schemas/RectResponse'
         404:
           description: invalid session id or no such window
           content:
@@ -1232,7 +1250,7 @@ paths:
     post:
       tags:
         - contexts
-      summary: Set window size
+      summary: Set window rect
       operationId: setWindowRect
       parameters:
         - name: "sessionId"
@@ -2292,7 +2310,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StringResponse'
+                $ref: '#/components/schemas/AnyResponse'
         404:
           description: invalid session id or no such window
           content:
@@ -2331,7 +2349,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StringResponse'
+                $ref: '#/components/schemas/AnyResponse'
         404:
           description: invalid session id or no such window
           content:
