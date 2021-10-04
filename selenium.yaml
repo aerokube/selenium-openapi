@@ -208,6 +208,250 @@ components:
         unhandledPromptBehavior:
           type: string
           enum: ["dismiss", "accept", "dismiss and notify", "accept and notify", "ignore"]
+        'goog:chromeOptions':
+          $ref: '#/components/schemas/ChromeOptions'
+        'moon:options':
+          $ref: '#/components/schemas/MoonOptions'
+        'moz:firefoxOptions':
+          $ref: '#/components/schemas/FirefoxOptions'
+        'ms:edgeOptions':
+          $ref: '#/components/schemas/EdgeOptions'
+        operaOptions:
+          $ref: '#/components/schemas/EdgeOptions'
+        'selenoid:options':
+          $ref: '#/components/schemas/SelenoidOptions'
+        'safari:automaticInspection':
+          type: boolean
+        'safari:automaticProfiling':
+          type: boolean
+    PreferenceValue:
+      oneOf:
+        - type: boolean
+        - type: integer
+        - type: string
+    FirefoxOptions:
+      type: object
+      properties:
+        androidPackage:
+          type: string
+        androidActivity:
+          type: string
+        androidDeviceSerial:
+          type: string
+        androidIntentArguments:
+          type: array
+          items:
+            type: string
+        args:
+          type: array
+          items:
+            type: string
+        binary:
+          type: string
+        env:
+          type: object
+          additionalProperties:
+            type: string
+        log:
+          type: object
+          properties:
+            level:
+              type: string
+              enum: [trace, debug, config, info, warn, error, fatal]
+          required:
+            - level
+        prefs:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/PreferenceValue'
+        profile:
+          type: string
+    MobileEmulation:
+      type: object
+      properties:
+        deviceName:
+          type: string
+        deviceMetrics:
+          type: object
+          properties:
+            width:
+              type: integer
+              minimum: 0
+            height:
+              type: integer
+              minimum: 0
+            pixelRatio:
+              type: number
+              format: float
+              minimum: 0.1
+            touch:
+              type: boolean
+              default: true
+          required:
+            - width
+            - height
+            - pixelRatio
+            - touch
+        userAgent:
+          type: string
+    PerfLoggingPrefs:
+      type: object
+      properties:
+        enableNetwork:
+          type: boolean
+          default: true
+        enablePage:
+          type: boolean
+          default: true
+        traceCategories:
+          type: string
+        bufferUsageReportingInterval:
+          type: integer
+          format: int64
+          default: 1000
+    ChromeOptions:
+      type: object
+      properties:
+        args:
+          type: array
+          items:
+            type: string
+        binary:
+          type: string
+        debuggerAddress:
+          type: string
+        detach:
+          type: boolean
+        excludeSwitches:
+          type: array
+          items:
+            type: string
+        extensions:
+          type: array
+          items:
+            type: string
+        localState:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/PreferenceValue'
+        minidumpPath:
+          type: string
+        mobileEmulation:
+          $ref: '#/components/schemas/MobileEmulation'
+        perfLoggingPrefs:
+          $ref: '#/components/schemas/PerfLoggingPrefs'
+        prefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/PreferenceValue'
+        windowTypes:
+          type: array
+          items:
+            type: string
+    OperaOptions:
+      type: object
+      properties:
+        args:
+          type: array
+          items:
+            type: string
+        binary:
+          type: string
+        extensions:
+          type: array
+          items:
+            type: string
+    EdgeOptions:
+      type: object
+      properties:
+        args:
+          type: array
+          items:
+            type: string
+        binary:
+          type: string
+        extensions:
+          type: array
+          items:
+            type: string
+    SelenoidOptions:
+      type: object
+      properties:
+        enableLog:
+          type: boolean
+        enableVideo:
+          type: boolean
+        enableVNC:
+          type: boolean
+        env:
+          type: array
+          items:
+            type: string
+        logName:
+          type: string
+        name:
+          type: string
+        s3KeyPattern:
+          type: string
+        sessionTimeout:
+          type: string
+        screenResolution:
+          type: string
+          description: Screen resolution in format 1920x1080x32 or 1920x1080
+        timeZone:
+          type: string
+          description: Time zone value like Europe/Moscow
+        videoFrameRate:
+          type: integer
+          format: int64
+        videoName:
+          type: string
+        videoScreenSize:
+          type: string
+          description: Video screen size in format 1920x1080
+    MoonMobileDevice:
+      type: object
+      properties:
+        deviceName:
+          type: string
+        orientation:
+          enum: [portrait, landscape]
+          default: portrait
+      required:
+        - deviceName
+    MoonOptions:
+      type: object
+      properties:
+        enableVNC:
+          type: boolean
+        env:
+          type: array
+          items:
+            type: string
+        logName:
+          type: string
+        mobileDevice:
+          $ref: '#/components/schemas/MoonMobileDevice'
+        name:
+          type: string
+        s3KeyPattern:
+          type: string
+        sessionTimeout:
+          type: string
+        screenResolution:
+          type: string
+          description: Screen resolution in format 1920x1080x32 or 1920x1080
+        timeZone:
+          type: string
+          description: Time zone value like Europe/Moscow
+        videoFrameRate:
+          type: integer
+          format: int64
+        videoName:
+          type: string
+        videoScreenSize:
+          type: string
+          description: Video screen size in format 1920x1080
     NewSessionRequest:
       type: object
       properties:
