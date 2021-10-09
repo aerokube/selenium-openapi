@@ -642,16 +642,20 @@ components:
       type: object
       properties:
         x:
-          type: integer
+          type: number
+          format: float
           minimum: 0
         y:
-          type: integer
+          type: number
+          format: float
           minimum: 0
         width:
-          type: integer
+          type: number
+          format: float
           minimum: 0
         height:
-          type: integer
+          type: number
+          format: float
           minimum: 0
       required:
         - x
@@ -2172,7 +2176,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Rect'
+                $ref: '#/components/schemas/RectResponse'
         404:
           description: invalid session id or no such window or no such element
           content:
