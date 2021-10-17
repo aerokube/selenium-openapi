@@ -208,6 +208,8 @@ components:
         unhandledPromptBehavior:
           type: string
           enum: ["dismiss", "accept", "dismiss and notify", "accept and notify", "ignore"]
+        'goog:loggingPrefs':
+          $ref: '#/components/schemas/LoggingPrefs'
         'goog:chromeOptions':
           $ref: '#/components/schemas/ChromeOptions'
         'moon:options':
@@ -294,6 +296,27 @@ components:
             - touch
         userAgent:
           type: string
+    LogType:
+      type: string
+      enum: [ 'browser', 'client', 'driver', 'performance', 'profiler', 'server' ]
+    LogLevel:
+      type: string
+      enum: [ 'OFF', 'SEVERE', 'WARNING', 'INFO', 'CONFIG', 'FINE', 'FINER', 'FINEST', 'ALL' ]
+    LoggingPrefs:
+      type: object
+      properties:
+        browser:
+          $ref: '#/components/schemas/LogLevel'
+        client:
+          $ref: '#/components/schemas/LogLevel'
+        driver:
+          $ref: '#/components/schemas/LogLevel'
+        performance:
+          $ref: '#/components/schemas/LogLevel'
+        profiler:
+          $ref: '#/components/schemas/LogLevel'
+        server:
+          $ref: '#/components/schemas/LogLevel'
     PerfLoggingPrefs:
       type: object
       properties:
@@ -522,6 +545,18 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AnyValue'
+    FileUploadRequest:
+      type: object
+      properties:
+        file:
+          type: string
+    FileUploadResponse:
+      type: object
+      properties:
+        value:
+          type: string
+      required:
+        - value
     AnyResponse:
       type: object
       properties:
@@ -2606,6 +2641,45 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         500:
           description: unsupported operation or unexpected alert open or script timeout or javascript error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /session/{sessionId}/file:
+    post:
+      tags:
+        - document
+      summary: Upload file
+      operationId: uploadFile
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FileUploadRequest'
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileUploadResponse'
+        404:
+          description: invalid session id or no such window
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: unsupported operation or unexpected alert open
           content:
             application/json:
               schema:
