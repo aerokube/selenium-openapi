@@ -55,6 +55,8 @@ tags:
     description: Printing commands
   - name: screenshots
     description: Commands to take screenshots
+  - name: mozilla
+    description: Commands specific to Mozilla Firefox
 components:
   securitySchemes:
     BasicAuth:
@@ -268,6 +270,35 @@ components:
             $ref: '#/components/schemas/PreferenceValue'
         profile:
           type: string
+    AddonInstallRequest:
+      type: object
+      properties:
+        # There is also "path" parameter for installing extension from local file (we consider it useless)
+        addon:
+          type: string
+        temporary:
+          type: boolean
+          description: temporarily installed extension will be removed at the end of browser session
+          default: true
+      required:
+        - addon
+    AddonUninstallRequest:
+      type: object
+      properties:
+        id:
+          type: string
+      required:
+        - id
+    FirefoxContext:
+      type: string
+      enum: [content, chrome]
+    ContextRequest:
+      type: object
+      properties:
+        context:
+          $ref: '#/components/schemas/FirefoxContext'
+      required:
+        - context
     MobileEmulation:
       type: object
       properties:
@@ -3208,3 +3239,209 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+
+  /session/{sessionId}/moz/context:
+    get:
+      tags:
+        - mozilla
+      summary: Get current context
+      operationId: getContext
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StringResponse'
+        400:
+          description: invalid argument
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: invalid session id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: unknown error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags:
+        - mozilla
+      summary: Set current context
+      operationId: setContext
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContextRequest'
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyResponse'
+        400:
+          description: invalid argument
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: invalid session id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: unknown error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /session/{sessionId}/moz/addon/install:
+    post:
+      tags:
+        - mozilla
+      summary: Install addon
+      operationId: installAddon
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddonInstallRequest'
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StringResponse'
+        400:
+          description: invalid argument
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: invalid session id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: unknown error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /session/{sessionId}/moz/addon/uninstall:
+    post:
+      tags:
+        - mozilla
+      summary: Uninstall addon
+      operationId: uninstallAddon
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddonUninstallRequest'
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyResponse'
+        400:
+          description: invalid argument
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: invalid session id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: unknown error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /session/{sessionId}/moz/screenshot/full:
+    get:
+      tags:
+        - mozilla
+      summary: Takes full page screenshot
+      operationId: takeFullScreenshot
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StringResponse'
+        404:
+          description: invalid session id or no such window
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: unsupported operation or unexpected alert open or unable to capture screen
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
