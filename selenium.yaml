@@ -57,6 +57,8 @@ tags:
     description: Commands to take screenshots
   - name: mozilla
     description: Commands specific to Mozilla Firefox
+  - name: aerokube
+    description: Commands specific to Selenoid and Moon
 components:
   securitySchemes:
     BasicAuth:
@@ -85,7 +87,7 @@ components:
           description: "Always null value"
           type: string
           nullable: true
-    StringResponse:
+    StringResponse: # In some rare cases this is also used a request body
       type: object
       properties:
         value:
@@ -104,6 +106,15 @@ components:
       properties:
         value:
           type: boolean
+      required:
+        - value
+    ArrayResponse:
+      type: object
+      properties:
+        value:
+          type: array
+          items:
+            type: string
       required:
         - value
     ErrorCode:
@@ -3445,3 +3456,149 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
+  /session/{sessionId}/aerokube/download/{fileName}:
+    get:
+      tags:
+        - aerokube
+      summary: Downloads file from remote container with browser
+      operationId: downloadRemoteFile
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"
+        - name: "fileName"
+          in: "path"
+          description: "Requested file name"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StringResponse'
+        404:
+          description: invalid session id or file not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+        - aerokube
+      summary: Deletes file in remote container with browser
+      operationId: deleteRemoteFile
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"
+        - name: "fileName"
+          in: "path"
+          description: "Requested file name"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        200:
+          description: successful operation
+        404:
+          description: invalid session id or file not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /session/{sessionId}/aerokube/download:
+    get:
+      tags:
+        - aerokube
+      summary: Lists files in remote container with browser
+      operationId: listRemoteFiles
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"
+        - name: "json"
+          in: "query"
+          description: "Information is returned in JSON format"
+          required: true
+          schema:
+            type: "boolean"
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayResponse'
+        404:
+          description: invalid session id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /session/{sessionId}/aerokube/clipboard:
+    get:
+      tags:
+        - aerokube
+      summary: Returns clipboard contents
+      operationId: getClipboard
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StringResponse'
+        404:
+          description: invalid session id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags:
+        - aerokube
+      summary: Updates clipboard contents
+      operationId: updateClipboard
+      parameters:
+        - name: "sessionId"
+          in: "path"
+          description: "Requested session ID"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StringResponse'
+      responses:
+        200:
+          description: successful operation
+        404:
+          description: invalid session id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
