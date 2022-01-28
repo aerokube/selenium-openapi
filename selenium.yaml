@@ -87,7 +87,7 @@ components:
           description: "Always null value"
           type: string
           nullable: true
-    StringResponse: # In some rare cases this is also used a request body
+    StringResponse:
       type: object
       properties:
         value:
@@ -924,6 +924,16 @@ components:
             - pageRanges
       required:
         - options
+    ClipboardData:
+      type: object
+      properties:
+        value:
+          type: string
+        media:
+          type: string
+          enum: ['', 'image/png']
+      required:
+        - value
 paths:
   /status:
     get:
@@ -3568,7 +3578,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StringResponse'
+                $ref: '#/components/schemas/ClipboardData'
         404:
           description: invalid session id
           content:
@@ -3592,7 +3602,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/StringResponse'
+              $ref: '#/components/schemas/ClipboardData'
       responses:
         200:
           description: successful operation
