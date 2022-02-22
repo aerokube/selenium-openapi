@@ -452,6 +452,11 @@ components:
           type: array
           items:
             type: string
+        labels:
+          type: object
+          additionalProperties:
+            type: string
+          description: Custom container labels
         logName:
           type: string
         name:
@@ -498,6 +503,11 @@ components:
           items:
             type: string
           description: Additional /etc/hosts entries
+        labels:
+          type: object
+          additionalProperties:
+            type: string
+          description: Custom pod labels
         mobileDevice:
           $ref: '#/components/schemas/MoonMobileDevice'
         name:
