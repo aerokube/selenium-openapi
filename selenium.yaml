@@ -487,28 +487,34 @@ components:
     MoonOptions:
       type: object
       properties:
-        enableVNC:
+        enableVideo:
           type: boolean
         env:
           type: array
           items:
             type: string
-        logName:
-          type: string
+        hosts:
+          type: array
+          items:
+            type: string
+          description: Additional /etc/hosts entries
         mobileDevice:
           $ref: '#/components/schemas/MoonMobileDevice'
         name:
           type: string
-        s3KeyPattern:
+        nameservers:
+          type: array
+          items:
+            type: string
+          description: Custom DNS servers
+        pattern:
           type: string
+          description: S3 upload pattern
         sessionTimeout:
           type: string
         screenResolution:
           type: string
           description: Screen resolution in format 1920x1080x32 or 1920x1080
-        timeZone:
-          type: string
-          description: Time zone value like Europe/Moscow
         videoFrameRate:
           type: integer
           format: int64
