@@ -3505,9 +3505,10 @@ paths:
         200:
           description: successful operation
           content:
-            application/json:
+            application/octet-stream:
               schema:
-                $ref: '#/components/schemas/StringResponse'
+                type: string
+                format: binary
         404:
           description: invalid session id or file not found
           content:
