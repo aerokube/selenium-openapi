@@ -1,4 +1,4 @@
-openapi: 3.0.2
+openapi: 3.0.3
 info:
   title: Selenium WebDriver
   description: '[Selenium WebDriver](https://www.w3.org/TR/webdriver) API specification'
@@ -810,28 +810,120 @@ components:
           description: "Text to send to element"
       required:
         - text
-    Action:
+    NullAction:
       type: object
       properties:
         type:
           type: string
-          enum: [pause, keyDown, keyUp, pointerDown, pointerUp, pointerMove, pointerCancel, scroll]
+          enum: [pause]
+          default: pause
+        duration:
+          type: integer
+          minimum: 0
+    KeyAction:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [pause, keyDown, keyUp]
+          default: pause
         value:
           type: string
+        pressed:
+          type: boolean
+        duration:
+          type: integer
+    StringOrigin:
+      type: string
+      enum: [viewport, pointer]
+    WebElementOrigin:
+      type: object
+      properties:
+        element-6066-11e4-a52e-4f735466cecf:
+          type: string
+          description: "Web element identifier"
+    ActionOrigin:
+      oneOf:
+        - $ref: '#/components/schemas/StringOrigin'
+        - $ref: '#/components/schemas/WebElementOrigin'
+    PointerAction:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [pause, pointerDown, pointerUp, pointerMove, pointerCancel]
+          default: pause
         button:
           type: integer
           enum: [0, 1, 2]
           description: "Possible values: `0` - left button, `1` - middle button, `2` - right button"
-        duration:
+        pressed:
           type: integer
         x:
           type: integer
         y:
           type: integer
+        width:
+          type: integer
+          minimum: 0
+        height:
+          type: integer
+          minimum: 0
+        pressure:
+          type: integer
+          minimum: 0
+          maximum: 1
+        tangentialPressure:
+          type: integer
+          minimum: -1
+          maximum: 1
+        tiltX:
+          type: integer
+          minimum: -90
+          maximum: 90
+        tiltY:
+          type: integer
+          minimum: -90
+          maximum: 90
+        twist:
+          type: integer
+          minimum: 0
+          maximum: 359
+        altitudeAngle:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1.5707 # π/2
+        asimuthAngle:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 6.2831 # 2π
         origin:
-          type: object
-          additionalProperties:
-            type: string
+          $ref: '#/components/schemas/ActionOrigin'
+    WheelAction:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [pause, scroll]
+          default: pause
+        x:
+          type: integer
+        y:
+          type: integer
+        deltaX:
+          type: integer
+        deltaY:
+          type: integer
+        origin:
+          $ref: '#/components/schemas/ActionOrigin'
+    Action:
+      oneOf:
+        - $ref: '#/components/schemas/NullAction'
+        - $ref: '#/components/schemas/KeyAction'
+        - $ref: '#/components/schemas/PointerAction'
+        - $ref: '#/components/schemas/WheelAction'
     ActionSequence:
       type: object
       properties:
@@ -846,6 +938,7 @@ components:
             pointerType:
               type: string
               enum: [mouse, pen, touch]
+              default: mouse
         actions:
           type: array
           items:
