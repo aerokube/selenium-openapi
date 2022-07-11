@@ -489,9 +489,32 @@ components:
           default: portrait
       required:
         - deviceName
+    ChromiumLogLevel:
+      type: string
+      enum: [ 'OFF', 'SEVERE', 'WARNING', 'INFO', 'DEBUG', 'ALL' ]
+    FirefoxLogLevel:
+      type: string
+      enum: [ 'fatal', 'error', 'warn', 'info', 'config', 'debug', 'trace' ]
+    MoonLogLevel:
+      oneOf:
+        - $ref: '#/components/schemas/FirefoxLogLevel'
+        - $ref: '#/components/schemas/ChromiumLogLevel'
+      description: Browser log level
+      externalDocs:
+        url: https://aerokube.com/moon/latest/#capability-log-level
     MoonOptions:
       type: object
       properties:
+        additionalFonts:
+          type: boolean
+          description: Enable additional regional fonts (Chinese, Japanese, Thai and so on)
+          externalDocs:
+            url: https://aerokube.com/moon/latest/#capability-additional-fonts
+        context:
+          type: string
+          description: Moon context archive URL
+          externalDocs:
+            url: https://aerokube.com/moon/latest/#capability-context
         enableVideo:
           type: boolean
         env:
@@ -508,6 +531,8 @@ components:
           additionalProperties:
             type: string
           description: Custom pod labels
+        logLevel:
+          $ref: '#/components/schemas/MoonLogLevel'
         mobileDevice:
           $ref: '#/components/schemas/MoonMobileDevice'
         name:
