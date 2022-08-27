@@ -671,11 +671,6 @@ components:
       required:
         - name
         - value
-        - path
-        - domain
-        - secure
-        - httpOnly
-        - sameSite
     CookiesResponse:
       type: object
       properties:
