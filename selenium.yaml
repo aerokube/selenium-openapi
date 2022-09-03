@@ -770,11 +770,6 @@ components:
           type: number
           format: float
           minimum: 0
-      required:
-        - x
-        - 'y'
-        - width
-        - height
     RectResponse:
       type: object
       properties:
